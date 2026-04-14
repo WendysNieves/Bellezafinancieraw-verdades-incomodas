@@ -82,6 +82,22 @@
 
 .barra-l{position:absolute;left:0;top:0;width:3px;height:100%}
 .barra-r{position:absolute;right:0;top:0;width:3px;height:100%}
+.cta-btn{
+  display:inline-block;
+  margin-top:18px;
+  padding:14px 28px;
+  background:#C8A96E;
+  color:#0F1720;
+  text-decoration:none;
+  font-weight:700;
+  border-radius:999px;
+  transition:all .25s ease;
+}
+
+.cta-btn:hover{
+  opacity:.9;
+  transform:translateY(-1px);
+}  
 </style>
 
 <div class="deck">
@@ -199,38 +215,49 @@ function buildSlides(){
   });
 
   // SLIDE FINAL
-  const sf = el('div','slide');
-  sf.innerHTML = `
-    <div class="barra-l" style="background:#C8A96E"></div>
-    <div class="barra-r" style="background:#C8A96E"></div>
-    <div class="s-final">
-      <div class="promesa-titulo">✦ PROMESA BFW (Belleza Financiera W) ✦</div>
-      <div class="promesa-texto">No requieres otro consejo de ahorro o presupuesto.<br> Requieres diseñar una arquitectura financiera<br>que sostenga tu paz mental, tu expansión, tu propósito y la vida que sueñas.</div>
-      <div class="promesa-sub">Dinero · Generación · Administración · Sistema · Energía · Decisiones · Visión · Ejecución · Mentalidad · Integración </div>
-      <div class="promesa-tags">
-        <span class="tag">Ver la verdad</span>
-        <span class="tag">Ordenar</span>
-        <span class="tag">Fondo de tranquilidad</span>
-        <span class="tag">Regularte</span>
-        <span class="tag">Sostener</span>
-        <span class="tag">Expandir</span>
-        <span class="tag">Vida soñada</span>
-      </div>
-       <div class="Cta-texto"> ¿Listo/a para construir tu arquitectura financiera?</div>
-  
-       <div class="Cta-texto"> Hablemos: </div>
-        <a 
+const sf = el('div','slide');
+sf.innerHTML = `
+  <div class="barra-l" style="background:#C8A96E"></div>
+  <div class="barra-r" style="background:#C8A96E"></div>
+  <div class="s-final">
+    <div class="promesa-titulo">✧ PROMESA BFW (Belleza Financiera W) ✧</div>
+    <div class="promesa-texto">
+      No requieres otro consejo de ahorro o presupuesto.<br>
+      Requieres diseñar una arquitectura financiera<br>
+      que sostenga tu paz mental, tu expansión, tu propósito y la vida que sueñas.
+    </div>
+    <div class="promesa-sub">
+      Dinero · Generación · Administración · Sistema · Energía · Decisiones · Visión · Ejecución · Mentalidad · Integración
+    </div>
+
+    <div class="promesa-tags">
+      <span class="tag">Ver la verdad</span>
+      <span class="tag">Ordenar</span>
+      <span class="tag">Fondo de tranquilidad</span>
+      <span class="tag">Regularte</span>
+      <span class="tag">Sostener</span>
+      <span class="tag">Expandir</span>
+      <span class="tag">Vida soñada</span>
+    </div>
+
+    <div class="cta-text">¿Lista/o para construir tu arquitectura financiera?</div>
+
+    <a 
       class="cta-btn"
       href="https://api.whatsapp.com/send?phone=573126893853&text=%C2%A1Hola!%20soy%20Wen%20Nieves,%20Apasionada%20por%20las%20finanzas,%20negocios%20y%20consultor%C3%ADas,%20me%20encantar%C3%ADa%20saber%20%C2%BFC%C3%B3mo%20puedo%20contribuir%20con%20tu%20crecimiento"
       target="_blank"
-      rel="noopener noreferrer">
-      Hablemos
+      rel="noopener noreferrer"
+    >
+      Hablemos:
     </a>
-    </div>
-    <div class="marca-footer">Belleza Financiera · de sobrevivir a sostener</div>`;
-  cont.appendChild(sf);
 
-  buildDots();
+    <div class="cta-text">Hablemos.</div>
+  </div>
+  <div class="marca-footer">Belleza Financiera • de sobrevivir a sostener</div>
+`;
+cont.appendChild(sf);
+
+buildDots();
 }
 
 function buildDots(){
