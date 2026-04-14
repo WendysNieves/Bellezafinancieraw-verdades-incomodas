@@ -1,0 +1,270 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cafe:#2A1E15;--cafe2:#3D2B1F;--cafe3:#1A1008;
+  --dorado:#C8A96E;--dorado2:#E8C97A;--crema:#F5F0E8;
+  --gris:#8A7D74;--blanco:#FFFFFF;
+}
+.deck{width:100%;font-family:var(--font-serif,'Georgia',serif)}
+.slide{
+  display:none;
+  background:#2A1E15;
+  border-radius:16px;
+  overflow:hidden;
+  aspect-ratio:16/9;
+  position:relative;
+  width:100%;
+}
+.slide.active{display:flex;flex-direction:column}
+
+.prog-wrap{padding:12px 0 8px;display:flex;align-items:center;gap:12px}
+.prog-dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#5C3D2E;cursor:pointer;transition:all .2s;flex-shrink:0}
+.dot.active{background:#C8A96E;width:20px;border-radius:4px}
+.dot.visited{background:#8A6A3A}
+.nav{display:flex;gap:8px;justify-content:center;padding:8px 0 4px}
+.nav button{
+  background:none;border:0.5px solid var(--color-border-secondary);
+  border-radius:8px;padding:8px 20px;font-size:13px;
+  color:var(--color-text-secondary);cursor:pointer;font-family:inherit;
+  transition:all .15s;
+}
+.nav button:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.nav button:disabled{opacity:0.3;cursor:default}
+.nav .btn-main{border-color:#C8A96E;color:#C8A96E}
+.nav .btn-main:hover{background:#C8A96E22}
+
+.slide-counter{font-size:12px;color:#8A7D74;text-align:center;padding:2px 0 6px;font-family:var(--font-sans)}
+
+/* ── SLIDE LAYOUTS ── */
+.s-header{
+  background:#1A1008;
+  padding:0 6% 0;
+  flex:1;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;
+  gap:0;
+}
+.s-header .marca{font-size:clamp(9px,1.5vw,13px);color:#C8A96E;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-sans);margin-bottom:clamp(8px,2%,18px)}
+.s-header .titulo{font-size:clamp(18px,4vw,42px);color:#E8C97A;font-weight:700;line-height:1.1;margin-bottom:clamp(6px,1.5%,14px)}
+.s-header .sub{font-size:clamp(9px,1.6vw,15px);color:#B8A898;font-style:italic;line-height:1.5;max-width:70%}
+.s-header .linea-d{width:clamp(40px,8%,80px);height:1px;background:#C8A96E;margin:clamp(8px,2%,18px) auto}
+.s-header .num-etapa{font-size:clamp(40px,8vw,80px);color:#3D2B1F;font-weight:700;line-height:1;position:absolute;right:5%;bottom:8%;font-family:var(--font-serif)}
+
+.top-bar{background:#1A1008;padding:clamp(6px,1.2%,12px) clamp(12px,3%,28px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #C8A96E44;flex-shrink:0}
+.top-bar .marca{font-size:clamp(8px,1.1vw,11px);color:#C8A96E;letter-spacing:.15em;font-family:var(--font-sans)}
+.top-bar .etapa-id{font-size:clamp(8px,1.1vw,11px);color:#8A7D74;font-family:var(--font-sans)}
+
+.s-body{flex:1;display:flex;gap:0;overflow:hidden}
+
+.col-izq{flex:0 0 42%;background:#221508;padding:clamp(10px,2.5%,24px) clamp(12px,3%,28px);display:flex;flex-direction:column;justify-content:center;border-right:1px solid #3D2B1F}
+.col-der{flex:1;padding:clamp(10px,2.5%,24px) clamp(12px,3%,28px);display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(6px,1.5%,14px)}
+
+.etapa-num{font-size:clamp(9px,1.2vw,12px);letter-spacing:.15em;font-family:var(--font-sans);margin-bottom:clamp(4px,1%,8px)}
+.etapa-nombre{font-size:clamp(14px,2.8vw,28px);color:#E8C97A;font-weight:700;line-height:1.2;margin-bottom:clamp(6px,1.5%,14px)}
+.etapa-linea{height:2px;width:clamp(24px,5%,48px);margin-bottom:clamp(8px,2%,18px);border-radius:1px}
+.etapa-verdad-label{font-size:clamp(7px,1vw,10px);letter-spacing:.12em;font-family:var(--font-sans);margin-bottom:clamp(3px,.8%,6px)}
+.etapa-verdad{font-size:clamp(9px,1.5vw,14px);color:#C4B8AE;font-style:italic;line-height:1.55}
+
+.bloque{border-radius:8px;padding:clamp(6px,1.2%,12px) clamp(8px,1.5%,14px);flex:1;min-height:0}
+.bloque-label{font-size:clamp(7px,.9vw,9px);letter-spacing:.12em;font-family:var(--font-sans);margin-bottom:clamp(3px,.7%,6px);font-weight:500}
+.bloque-texto{font-size:clamp(9px,1.4vw,13px);line-height:1.55}
+
+/* SLIDE FINAL */
+.s-final{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(16px,4%,40px);gap:clamp(8px,2%,20px);background:#1A1008}
+.promesa-titulo{font-size:clamp(8px,1.1vw,11px);color:#C8A96E;letter-spacing:.2em;font-family:var(--font-sans)}
+.promesa-texto{font-size:clamp(13px,2.5vw,24px);color:#E8C97A;line-height:1.4;font-weight:700;max-width:80%}
+.promesa-sub{font-size:clamp(9px,1.4vw,13px);color:#B8A898;font-style:italic;line-height:1.5}
+.promesa-tags{display:flex;gap:clamp(4px,1%,10px);justify-content:center;flex-wrap:wrap;margin-top:clamp(4px,1%,10px)}
+.tag{font-size:clamp(7px,1vw,10px);color:#C8A96E;border:1px solid #C8A96E55;border-radius:20px;padding:clamp(2px,.5%,4px) clamp(6px,1.2%,12px);font-family:var(--font-sans);letter-spacing:.08em}
+.marca-footer{font-size:clamp(7px,.9vw,9px);color:#5C3D2E;letter-spacing:.15em;font-family:var(--font-sans);position:absolute;bottom:clamp(4px,1%,10px);right:clamp(10px,2%,20px)}
+
+.barra-l{position:absolute;left:0;top:0;width:3px;height:100%}
+.barra-r{position:absolute;right:0;top:0;width:3px;height:100%}
+</style>
+
+<h2 class="sr-only">Presentación interactiva: Ruta Belleza Financiera — 9 slides con las 7 etapas del sistema BFW</h2>
+
+<div class="deck">
+  <div id="slides"></div>
+
+  <div class="prog-wrap">
+    <div class="prog-dots" id="dots"></div>
+  </div>
+  <div class="slide-counter" id="counter">1 / 9</div>
+  <div class="nav">
+    <button id="btn-prev" onclick="navSlide(-1)" disabled>← Anterior</button>
+    <button id="btn-next" onclick="navSlide(1)" class="btn-main">Siguiente →</button>
+  </div>
+</div>
+
+<script>
+const ETAPAS = [
+  {
+    num:"01", nombre:"Ver la verdad", color:"#7B6FA5", fondo:"#3D2B4A",
+    verdad:"La industria financiera te enseñó a generar dinero, pero no a desarrollar salud financiera. Puedes ganar más y seguir sin control, claridad ni paz.",
+    postura:"Facturar más no siempre significa vivir mejor. Necesitas salud financiera: control, resiliencia y dirección.",
+    solucion:"Mira tus hábitos, registra tus gastos y empieza a entender de dónde viene y a dónde va tu dinero. La claridad es el primer acto de amor propio."
+  },
+  {
+    num:"02", nombre:"Ordenar tu dinero", color:"#1D9E75", fondo:"#1A3A30",
+    verdad:"Muchas veces no tienes un problema de ingresos: tienes un problema de desorden, automatismo y fuga silenciosa.",
+    postura:"Más dinero no arregla un sistema roto. Si no sabes mirar tus hábitos, el dinero se diluye igual.",
+    solucion:"Registra, clasifica y redirige tu dinero. Crea un presupuesto simple, identifica fugas invisibles y establece prioridades reales."
+  },
+  {
+    num:"03", nombre:"Fondo de tranquilidad", color:"#C8A96E", fondo:"#3A2C10",
+    verdad:"La abundancia sin estructura no es prosperidad: es ansiedad con más dinero. Puedes manifestar o vender más… y seguir igual de alterada.",
+    postura:"La energía sin sistema se vuelve evasión. No basta con querer, hay que sostener.",
+    solucion:"Fondo de tranquilidad: 3 a 6 meses de tus gastos. Fondo de oxígeno: mínimo 1 mes del costo de tus gastos mensuales. Ese colchón te permite decidir desde la calma."
+  },
+  {
+    num:"04", nombre:"Regularte, no castigarte", color:"#C06B6B", fondo:"#3A1A1A",
+    verdad:"No siempre estás agotada por trabajar demasiado. Muchas veces estás agotada por el costo mental del caos financiero.",
+    postura:"El caos financiero no solo vacía tu cuenta: también vacía tu energía, enfoque y sistema nervioso.",
+    solucion:"Identifica qué emoción hay detrás del gasto. Crea pausas, límites y nuevas decisiones más conscientes. Ordenar tus finanzas también es cuidar tu salud mental."
+  },
+  {
+    num:"05", nombre:"Sostener lo que generas", color:"#5988B8", fondo:"#1A2A3A",
+    verdad:"Ganar más dinero no te va a salvar si sigues tomando decisiones desde la misma herida, el mismo miedo y el mismo patrón.",
+    postura:"Más ingresos no corrigen automáticamente el autosabotaje, la culpa o la impulsividad.",
+    solucion:"Automatiza el ahorro, separa cuentas por propósito, cuida deudas y crea estructura. Trabaja identidad + conducta financiera."
+  },
+  {
+    num:"06", nombre:"Expandir con estrategia", color:"#6A9E5A", fondo:"#1A2E14",
+    verdad:"Te enseñaron a ser independiente, pero no a ser sostenible. Ser fuerte no es hacerlo todo sola ni sobrevivir cansada.",
+    postura:"La independencia sin sistema te agota. Construir no es solo esfuerzo extremo.",
+    solucion:"Diversifica ingresos, invierte con criterio, crea múltiples fuentes. Expande desde una base sólida, no desde el pánico ni el burnout."
+  },
+  {
+    num:"07", nombre:"Vida soñada sostenida", color:"#7B6FA5", fondo:"#2A1E3A",
+    verdad:"No necesitas otro consejo de ahorro. Necesitas una vida que tu dinero pueda sostener.",
+    postura:"El dinero no debería ser una cárcel ni una lucha eterna; debería sostener la vida que sueñas.",
+    solucion:"Tu sistema financiero está diseñado para sostener tu vida soñada sin ansiedad, caos ni burnout."
+  }
+];
+
+const totalSlides = ETAPAS.length + 2;
+let current = 0;
+const visited = new Set([0]);
+
+function buildSlides(){
+  const cont = document.getElementById('slides');
+
+  // SLIDE 0: Portada
+  const s0 = el('div','slide active');
+  s0.innerHTML = `
+    <div style="position:absolute;left:0;top:0;width:3px;height:100%;background:#C8A96E"></div>
+    <div style="position:absolute;right:0;top:0;width:3px;height:100%;background:#C8A96E"></div>
+    <div class="s-header">
+      <div class="marca">Belleza Financiera</div>
+      <div class="linea-d"></div>
+      <div class="titulo">Ruta Belleza<br>Financiera</div>
+      <div class="sub">De las verdades incómodas a un sistema que sostiene tu vida soñada</div>
+      <div class="linea-d" style="margin-top:clamp(10px,2.5%,22px)"></div>
+      <div style="font-size:clamp(8px,1.1vw,11px);color:#5C3D2E;letter-spacing:.15em;font-family:var(--font-sans);margin-top:clamp(6px,1.5%,14px)">7 etapas · sistema BFW</div>
+    </div>`;
+  cont.appendChild(s0);
+
+  // SLIDES etapas
+  ETAPAS.forEach((e,i) => {
+    const s = el('div','slide');
+    s.innerHTML = `
+      <div class="barra-l" style="background:${e.color}"></div>
+      <div class="barra-r" style="background:${e.color}44"></div>
+      <div class="top-bar">
+        <span class="marca">Belleza Financiera</span>
+        <span class="etapa-id">Etapa ${e.num} de 07</span>
+      </div>
+      <div class="s-body">
+        <div class="col-izq" style="background:${e.fondo}">
+          <div class="etapa-num" style="color:${e.color}">${e.num} ·</div>
+          <div class="etapa-nombre">${e.nombre}</div>
+          <div class="etapa-linea" style="background:${e.color}"></div>
+          <div class="etapa-verdad-label" style="color:${e.color}">Verdad incómoda</div>
+          <div class="etapa-verdad">"${e.verdad}"</div>
+        </div>
+        <div class="col-der">
+          <div class="bloque" style="background:#221508;border:0.5px solid #3D2B1F;flex:0 0 auto">
+            <div class="bloque-label" style="color:#8A7D74">Mi postura</div>
+            <div class="bloque-texto" style="color:#C4B8AE">${e.postura}</div>
+          </div>
+          <div class="bloque" style="background:${e.fondo};border:0.5px solid ${e.color}44;flex:0 0 auto">
+            <div class="bloque-label" style="color:${e.color}">Dirección BFW</div>
+            <div class="bloque-texto" style="color:#E8C97A">${e.solucion}</div>
+          </div>
+        </div>
+      </div>
+      <div class="etapa-num" style="position:absolute;right:4%;bottom:5%;font-size:clamp(28px,5vw,56px);color:#3D2B1F;font-weight:700;font-family:var(--font-serif)">${e.num}</div>`;
+    cont.appendChild(s);
+  });
+
+  // SLIDE FINAL
+  const sf = el('div','slide');
+  sf.innerHTML = `
+    <div class="barra-l" style="background:#C8A96E"></div>
+    <div class="barra-r" style="background:#C8A96E"></div>
+    <div class="s-final">
+      <div class="promesa-titulo">✦ PROMESA BFW ✦</div>
+      <div class="promesa-texto">No necesitas otro consejo de ahorro.<br>Necesitas un sistema financiero<br>que sostenga la vida que sueñas.</div>
+      <div class="promesa-sub">dinero · sistema · energía · decisiones · visión · ejecución</div>
+      <div class="promesa-tags">
+        <span class="tag">Ver la verdad</span>
+        <span class="tag">Ordenar</span>
+        <span class="tag">Fondo de tranquilidad</span>
+        <span class="tag">Regularte</span>
+        <span class="tag">Sostener</span>
+        <span class="tag">Expandir</span>
+        <span class="tag">Vida soñada</span>
+      </div>
+    </div>
+    <div class="marca-footer">Belleza Financiera · de sobrevivir a sostener</div>`;
+  cont.appendChild(sf);
+
+  buildDots();
+}
+
+function buildDots(){
+  const cont = document.getElementById('dots');
+  cont.innerHTML='';
+  for(let i=0;i<totalSlides;i++){
+    const d = el('div','dot'+(i===0?' active visited':''));
+    d.onclick=()=>goTo(i);
+    d.title = i===0?'Portada':i<=ETAPAS.length?`Etapa ${String(i).padStart(2,'0')}`:'Promesa BFW';
+    cont.appendChild(d);
+  }
+}
+
+function goTo(n){
+  if(n<0||n>=totalSlides) return;
+  const slides = document.querySelectorAll('.slide');
+  slides[current].classList.remove('active');
+  current = n;
+  slides[current].classList.add('active');
+  visited.add(current);
+  updateUI();
+}
+
+function navSlide(dir){ goTo(current+dir); }
+
+function updateUI(){
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach((d,i)=>{
+    d.className='dot'+(visited.has(i)?' visited':'')+(i===current?' active':'');
+  });
+  document.getElementById('btn-prev').disabled = current===0;
+  document.getElementById('btn-next').disabled = current===totalSlides-1;
+  document.getElementById('btn-next').textContent = current===totalSlides-1 ? 'Fin' : 'Siguiente →';
+  document.getElementById('counter').textContent = `${current+1} / ${totalSlides}`;
+}
+
+function el(tag,cls){const e=document.createElement(tag);if(cls)e.className=cls;return e;}
+
+buildSlides();
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') navSlide(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') navSlide(-1);
+});
+</script>
