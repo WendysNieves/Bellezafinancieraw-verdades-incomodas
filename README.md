@@ -22,10 +22,8 @@ Compatible con desktop y móvil.
 ---
 
 ## Promesa BFW
-
-> No te ayudo solo a ahorrar o a ordenar dinero.  
-> Te ayudo a construir un sistema financiero que sostenga la vida que quieres vivir.  
-> *dinero · sistema · energía · decisiones · visión · ejecución*
+> Te ayudo a diseñar una arquitectura financiera que sostenga tu paz mental, tu expansión, tu propósito y la vida que quieres construir.
+> *dinero · Administración · sistema · energía · decisiones · visión · ejecución*
 
 ---
 
@@ -37,4 +35,4 @@ Compatible con desktop y móvil.
 
 ## Marca
 
-**Belleza Financiera** · de sobrevivir a sostener riqueza de forma consciente y alienada✨
+**Belleza Financiera** · de sobrevivir a sostener riqueza de forma consciente y alineada✨
