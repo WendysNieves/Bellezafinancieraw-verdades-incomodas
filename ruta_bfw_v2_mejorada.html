@@ -1,0 +1,308 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.deck{width:100%;font-family:var(--font-serif,'Georgia',serif)}
+.slide{display:none;border-radius:16px;overflow:hidden;aspect-ratio:16/9;position:relative;width:100%;background:#2A1E15}
+.slide.active{display:flex;flex-direction:column}
+
+.prog-wrap{padding:10px 0 4px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.dot{width:7px;height:7px;border-radius:50%;background:#5C3D2E;cursor:pointer;transition:all .2s;flex-shrink:0}
+.dot.active{background:#C8A96E;width:18px;border-radius:4px}
+.dot.visited{background:#8A6A3A}
+.nav{display:flex;gap:8px;justify-content:center;padding:6px 0 4px}
+.nav button{background:none;border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:7px 18px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;font-family:inherit;transition:all .15s}
+.nav button:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.nav button:disabled{opacity:0.25;cursor:default}
+.nav .btn-main{border-color:#C8A96E;color:#C8A96E}
+.nav .btn-main:hover{background:#C8A96E22}
+.slide-counter{font-size:11px;color:#8A7D74;text-align:center;padding:2px 0 4px;font-family:var(--font-sans)}
+
+.top-bar{background:#1A1008;padding:clamp(5px,1%,10px) clamp(10px,2.5%,24px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #C8A96E33;flex-shrink:0}
+.top-bar .marca{font-size:clamp(7px,1vw,10px);color:#C8A96E;letter-spacing:.15em;font-family:var(--font-sans)}
+.top-bar .etapa-id{font-size:clamp(7px,1vw,10px);color:#5C3D2E;font-family:var(--font-sans)}
+.barra-l{position:absolute;left:0;top:0;width:3px;height:100%}
+.barra-r{position:absolute;right:0;top:0;width:3px;height:100%}
+
+/* Portada */
+.s-cover{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4% 8%;gap:0;background:#1A1008}
+.s-cover .badge{font-size:clamp(7px,1vw,10px);color:#C8A96E;letter-spacing:.2em;font-family:var(--font-sans);margin-bottom:clamp(6px,1.5%,14px);border:1px solid #C8A96E44;border-radius:20px;padding:3px 14px}
+.s-cover .titulo{font-size:clamp(20px,4.2vw,44px);color:#E8C97A;font-weight:700;line-height:1.1;margin-bottom:clamp(6px,1.5%,14px)}
+.s-cover .sub{font-size:clamp(9px,1.5vw,14px);color:#B8A898;font-style:italic;line-height:1.5;max-width:65%}
+.s-cover .linea{width:clamp(36px,6%,64px);height:1px;background:#C8A96E;margin:clamp(8px,2%,18px) auto}
+.s-cover .promesa-mini{font-size:clamp(8px,1.1vw,11px);color:#7B6B5E;letter-spacing:.05em;font-family:var(--font-sans)}
+
+/* Slide verdad — layout 3 columnas */
+.s-tres{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;overflow:hidden}
+.col{display:flex;flex-direction:column;justify-content:center;padding:clamp(8px,2%,20px) clamp(10px,2.2%,22px);position:relative}
+.col+.col{border-left:1px solid #3D2B1F}
+.col-num{font-size:clamp(7px,.9vw,9px);letter-spacing:.15em;font-family:var(--font-sans);margin-bottom:clamp(3px,.7%,6px)}
+.col-title{font-size:clamp(8px,1.1vw,11px);letter-spacing:.1em;font-family:var(--font-sans);font-weight:500;margin-bottom:clamp(4px,1%,10px)}
+.col-texto{font-size:clamp(9px,1.45vw,13.5px);line-height:1.55}
+.col-adelanto{font-size:clamp(7px,.95vw,10px);font-family:var(--font-sans);font-style:italic;line-height:1.45;margin-top:clamp(6px,1.5%,14px);padding-top:clamp(5px,1.2%,10px);border-top:1px solid #3D2B1F}
+
+/* Slide resumen final */
+.s-resumen{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:0;overflow:hidden}
+.mini-card{display:flex;flex-direction:column;padding:clamp(6px,1.5%,14px) clamp(8px,1.8%,16px);border-right:1px solid #3D2B1F}
+.mini-card:last-child{border-right:none}
+.mini-num{font-size:clamp(7px,.85vw,9px);letter-spacing:.12em;font-family:var(--font-sans);margin-bottom:3px}
+.mini-nombre{font-size:clamp(9px,1.3vw,12px);color:#E8C97A;font-weight:700;line-height:1.2;margin-bottom:4px}
+.mini-verdad{font-size:clamp(7px,1vw,9.5px);color:#8A7D74;font-style:italic;line-height:1.4;flex:1}
+.mini-dir{font-size:clamp(7px,.95vw,9px);font-family:var(--font-sans);line-height:1.4;margin-top:5px;padding-top:5px;border-top:1px solid #3D2B1F}
+
+/* Cierre */
+.s-cierre{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4% 8%;gap:clamp(6px,1.5%,16px);background:#1A1008}
+.c-badge{font-size:clamp(7px,.9vw,9px);color:#C8A96E;letter-spacing:.2em;font-family:var(--font-sans);border:1px solid #C8A96E33;border-radius:20px;padding:2px 12px}
+.c-titulo{font-size:clamp(14px,2.8vw,30px);color:#E8C97A;font-weight:700;line-height:1.25;max-width:78%}
+.c-sub{font-size:clamp(9px,1.4vw,13px);color:#B8A898;font-style:italic;line-height:1.5}
+.c-formula{display:flex;gap:clamp(4px,1%,10px);flex-wrap:wrap;justify-content:center;margin-top:clamp(4px,1%,10px)}
+.c-tag{font-size:clamp(7px,.9vw,9px);color:#C8A96E;border:1px solid #C8A96E44;border-radius:20px;padding:2px 10px;font-family:var(--font-sans)}
+.c-footer{position:absolute;bottom:clamp(4px,.8%,8px);right:clamp(10px,2%,18px);font-size:clamp(6px,.8vw,8px);color:#3D2B1F;letter-spacing:.12em;font-family:var(--font-sans)}
+</style>
+
+<h2 class="sr-only">Ruta Belleza Financiera v2 — 12 verdades incómodas integradas en slides interactivos</h2>
+
+<div class="deck">
+  <div id="slides-v2"></div>
+  <div class="prog-wrap" id="dots-v2"></div>
+  <div class="slide-counter" id="counter-v2">1 / 14</div>
+  <div class="nav">
+    <button id="prev-v2" onclick="nav2(-1)" disabled>← Anterior</button>
+    <button id="next-v2" onclick="nav2(1)" class="btn-main">Siguiente →</button>
+  </div>
+</div>
+
+<script>
+const VERDADES = [
+  {
+    num:"01",
+    verdad:"La industria financiera te enseñó a generar dinero, pero no a desarrollar salud financiera.",
+    postura:"Facturar más no siempre significa vivir mejor. El dinero también debería darte control, resiliencia y paz.",
+    dir:"Te ayudo a construir salud financiera: orden del día a día, fondo de tranquilidad, metas claras y decisiones que sí sostengan tu bienestar.",
+    adelanto:"Para construir un sistema financiero que sostenga tu vida soñada, primero necesitas ver la verdad de dónde estás.",
+    color:"#7B6FA5", fondo:"#2A1E3A"
+  },
+  {
+    num:"02",
+    verdad:"Muchas veces no tienes un problema de ingresos; tienes un problema de desorden, automatismo y falta de consciencia financiera.",
+    postura:"Más dinero no arregla un sistema roto. Si no sabes mirar tus hábitos, el dinero se diluye igual.",
+    dir:"Te enseño a registrar, clasificar y redirigir tu dinero para que dejes de perderlo en fugas invisibles y automatismos.",
+    adelanto:"El sistema que construiremos empieza por hacerte consciente de cada peso que entra y sale.",
+    color:"#1D9E75", fondo:"#1A3A2C"
+  },
+  {
+    num:"03",
+    verdad:"No siempre te falta dinero; te falta sistema.",
+    postura:"El problema no es solo cuánto entra, sino qué tan bien está sostenido lo que entra.",
+    dir:"Te enseño a crear un sistema financiero simple y sostenible: cuentas, categorías, prioridades y automatizaciones.",
+    adelanto:"Un sistema claro es la base del sostenimiento. Sin él, hasta los mejores ingresos se evaporan.",
+    color:"#1D9E75", fondo:"#1A3A2C"
+  },
+  {
+    num:"04",
+    verdad:"La abundancia sin estructura no es prosperidad; es ansiedad con más dinero.",
+    postura:"La energía sin sistema se vuelve evasión. No basta con 'manifestar', hay que sostener.",
+    dir:"Mi enfoque une dinero + sistema, energía + decisiones, visión + ejecución para convertir la abundancia en estabilidad real.",
+    adelanto:"Sostener lo que generas es la diferencia entre crecer y repetir el ciclo en otro nivel de ingresos.",
+    color:"#C8A96E", fondo:"#3A2A0A"
+  },
+  {
+    num:"05",
+    verdad:"No siempre te falta disciplina; muchas veces te falta una vida que sí te haga sentido sostener.",
+    postura:"No puedes sostener hábitos financieros sanos en una vida que internamente se siente pesada, ajena o incoherente.",
+    dir:"Te acompaño a diseñar la vida que quieres y luego a crear el sistema financiero que la sostenga con coherencia.",
+    adelanto:"Tu vida soñada es el norte. El sistema financiero es el vehículo que te lleva ahí.",
+    color:"#C06B6B", fondo:"#3A1818"
+  },
+  {
+    num:"06",
+    verdad:"No siempre estás agotada por trabajar demasiado; muchas veces estás agotada por el costo mental del caos financiero.",
+    postura:"El caos financiero no solo vacía tu cuenta; también vacía tu energía, enfoque y sistema nervioso.",
+    dir:"Te ayudo a ordenar tus finanzas para recuperar paz mental, bajar la alerta y tomar decisiones con más calma.",
+    adelanto:"Cuando el dinero tiene orden, tu mente tiene espacio para enfocarse en lo que realmente importa.",
+    color:"#C06B6B", fondo:"#3A1818"
+  },
+  {
+    num:"07",
+    verdad:"Ganar más dinero no te va a salvar si sigues tomando decisiones desde la misma herida, el mismo miedo y el mismo patrón.",
+    postura:"Más ingresos no corrigen automáticamente el autosabotaje, la culpa o la impulsividad.",
+    dir:"Trabajamos identidad + estructura + conducta financiera, para que no repitas el mismo ciclo en otro nivel de ingresos.",
+    adelanto:"El verdadero cambio ocurre cuando el trabajo interior y el sistema financiero van juntos.",
+    color:"#5988B8", fondo:"#1A2836"
+  },
+  {
+    num:"08",
+    verdad:"Te enseñaron a ordenar el dinero, pero no a vivir en paz con él.",
+    postura:"Organizar no es suficiente si sigues sintiendo culpa, miedo o alerta constante.",
+    dir:"Mi trabajo no se queda en presupuesto: vamos a sanar la relación con el dinero y convertirla en estructura práctica.",
+    adelanto:"La paz financiera no es tener todo resuelto. Es tener claridad, dirección y una relación sana con tu dinero.",
+    color:"#5988B8", fondo:"#1A2836"
+  },
+  {
+    num:"09",
+    verdad:"Muchas compras no nacen del deseo real; nacen de ansiedad, evasión o desregulación emocional.",
+    postura:"El gasto emocional no es falta de carácter; es información sobre algo que no estás sabiendo sostener.",
+    dir:"Te ayudo a identificar qué emoción hay detrás del gasto y a crear límites, pausas y nuevas decisiones más conscientes.",
+    adelanto:"Cuando entiendes qué mueve tu dinero, dejas de reaccionar y empiezas a decidir.",
+    color:"#D4537E", fondo:"#3A1228"
+  },
+  {
+    num:"10",
+    verdad:"Quieres libertad financiera, pero sigues evitando mirar tus números.",
+    postura:"La claridad financiera no es castigo; es madurez, liderazgo y amor propio.",
+    dir:"Te acompaño a mirar tus números sin juicio, entenderlos y convertirlos en poder de decisión.",
+    adelanto:"Mirar tus números no te limita. Te libera. La libertad financiera empieza con la verdad.",
+    color:"#D4537E", fondo:"#3A1228"
+  },
+  {
+    num:"11",
+    verdad:"Te enseñaron a ser independiente, pero no a ser sostenible.",
+    postura:"Ser fuerte no es hacerlo todo sola ni sobrevivir cansada.",
+    dir:"Construimos sistemas, apoyo, estructura y prioridades para que tu economía no dependa solo de tu esfuerzo extremo.",
+    adelanto:"La sostenibilidad es la nueva independencia. Un sistema que funcione incluso cuando tú descansas.",
+    color:"#6A9E5A", fondo:"#1A2E14"
+  },
+  {
+    num:"12",
+    verdad:"No necesitas otro consejo de ahorro; necesitas una vida que tu dinero pueda sostener.",
+    postura:"El dinero no debería ser una cárcel ni una lucha eterna; debería sostener la vida que sueñas.",
+    dir:"Mi promesa es ayudarte a construir un sistema financiero que sostenga tu vida soñada sin ansiedad, caos ni burnout.",
+    adelanto:"Este es el para qué de todo: un sistema financiero que sostenga esa vida soñada.",
+    color:"#7B6FA5", fondo:"#2A1E3A"
+  }
+];
+
+let cur2 = 0;
+const vis2 = new Set([0]);
+
+function buildV2(){
+  const cont = document.getElementById('slides-v2');
+  cont.innerHTML = '';
+
+  // PORTADA
+  const p = mk('div','slide active');
+  p.innerHTML = `
+    <div class="barra-l" style="background:#C8A96E"></div>
+    <div class="barra-r" style="background:#C8A96E44"></div>
+    <div class="s-cover">
+      <div class="badge">Belleza Financiera · BFW</div>
+      <div class="titulo">12 Verdades Incómodas<br>del Dinero</div>
+      <div class="sub">Lo que la industria financiera dejó por fuera — y cómo le doy la vuelta</div>
+      <div class="linea"></div>
+      <div class="promesa-mini">Para construir un sistema financiero que sostenga tu vida soñada</div>
+    </div>`;
+  cont.appendChild(p);
+
+  // SLIDES VERDADES
+  VERDADES.forEach((v,i) => {
+    const s = mk('div','slide');
+    s.innerHTML = `
+      <div class="barra-l" style="background:${v.color}"></div>
+      <div class="barra-r" style="background:${v.color}33"></div>
+      <div class="top-bar">
+        <span class="marca">Belleza Financiera</span>
+        <span class="etapa-id">Verdad ${v.num} de 12</span>
+      </div>
+      <div class="s-tres">
+        <div class="col" style="background:${v.fondo}">
+          <div class="col-num" style="color:${v.color}">${v.num} · verdad incómoda</div>
+          <div class="col-texto" style="color:#E8C97A;font-size:clamp(10px,1.6vw,15px);font-weight:700;line-height:1.35">"${v.verdad}"</div>
+        </div>
+        <div class="col" style="background:#221508">
+          <div class="col-title" style="color:#8A7D74">Mi postura</div>
+          <div class="col-texto" style="color:#C4B8AE;font-style:italic">${v.postura}</div>
+        </div>
+        <div class="col" style="background:${v.fondo}">
+          <div class="col-title" style="color:${v.color}">Dirección BFW</div>
+          <div class="col-texto" style="color:#E8C97A">${v.dir}</div>
+          <div class="col-adelanto" style="color:${v.color}">
+            <span style="letter-spacing:.1em;font-size:clamp(6px,.8vw,8px);font-family:var(--font-sans);display:block;margin-bottom:3px">PARA QUÉ</span>
+            ${v.adelanto}
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;right:3%;bottom:6%;font-size:clamp(26px,4.5vw,50px);color:#3D2B1F;font-weight:700;font-family:var(--font-serif);line-height:1">${v.num}</div>`;
+    cont.appendChild(s);
+  });
+
+  // SLIDE RESUMEN (2 bloques de 4 verdades c/u en layout visual)
+  ['01–04','05–08','09–12'].forEach((rango,ri) => {
+    const grupo = VERDADES.slice(ri*4, ri*4+4);
+    const sr = mk('div','slide');
+    sr.innerHTML = `
+      <div class="barra-l" style="background:#C8A96E"></div>
+      <div class="top-bar">
+        <span class="marca">Belleza Financiera</span>
+        <span class="etapa-id">Verdades ${rango} · resumen</span>
+      </div>
+      <div class="s-resumen">
+        ${grupo.map(v=>`
+          <div class="mini-card">
+            <div class="mini-num" style="color:${v.color}">${v.num}</div>
+            <div class="mini-nombre">${v.verdad.split(';')[0].replace(/"/g,'')}</div>
+            <div class="mini-verdad">${v.postura}</div>
+            <div class="mini-dir" style="color:${v.color}">${v.dir.substring(0,90)}…</div>
+          </div>`).join('')}
+      </div>`;
+    cont.appendChild(sr);
+  });
+
+  // CIERRE
+  const sc = mk('div','slide');
+  sc.innerHTML = `
+    <div class="barra-l" style="background:#C8A96E"></div>
+    <div class="barra-r" style="background:#C8A96E"></div>
+    <div class="s-cierre">
+      <div class="c-badge">✦ PROMESA BFW ✦</div>
+      <div class="c-titulo">No te ayudo solo a ahorrar o a ordenar dinero.<br>Te ayudo a construir un sistema financiero<br>que sostenga la vida que quieres vivir.</div>
+      <div class="c-sub">dinero · sistema · energía · decisiones · visión · ejecución</div>
+      <div class="c-formula">
+        <span class="c-tag">salud financiera</span>
+        <span class="c-tag">estructura</span>
+        <span class="c-tag">hábitos</span>
+        <span class="c-tag">regulación emocional</span>
+        <span class="c-tag">identidad</span>
+        <span class="c-tag">dirección estratégica</span>
+      </div>
+    </div>
+    <div class="c-footer">Belleza Financiera · de sobrevivir a sostener</div>`;
+  cont.appendChild(sc);
+
+  buildDots2();
+}
+
+function buildDots2(){
+  const cont = document.getElementById('dots-v2');
+  cont.innerHTML='';
+  const total = document.querySelectorAll('#slides-v2 .slide').length;
+  for(let i=0;i<total;i++){
+    const d = mk('div','dot'+(i===0?' active visited':''));
+    d.onclick=()=>goTo2(i);
+    cont.appendChild(d);
+  }
+}
+
+function goTo2(n){
+  const slides = document.querySelectorAll('#slides-v2 .slide');
+  const total = slides.length;
+  if(n<0||n>=total) return;
+  slides[cur2].classList.remove('active');
+  cur2 = n;
+  slides[cur2].classList.add('active');
+  vis2.add(cur2);
+  const dots = document.querySelectorAll('#dots-v2 .dot');
+  dots.forEach((d,i)=>{d.className='dot'+(vis2.has(i)?' visited':'')+(i===cur2?' active':'')});
+  document.getElementById('prev-v2').disabled = cur2===0;
+  document.getElementById('next-v2').disabled = cur2===total-1;
+  document.getElementById('next-v2').textContent = cur2===total-1?'Fin':'Siguiente →';
+  document.getElementById('counter-v2').textContent = `${cur2+1} / ${total}`;
+}
+
+function nav2(d){ goTo2(cur2+d); }
+function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
+
+buildV2();
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') nav2(1);
+  if(e.key==='ArrowLeft') nav2(-1);
+});
+</script>
